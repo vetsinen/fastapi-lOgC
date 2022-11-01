@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles
+from starlette.responses import FileResponse
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class Msg(BaseModel):
     msg: str
@@ -9,8 +12,11 @@ class Msg(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World. Welcome to FastAPI!"}
+    return FileResponse('static/index.html')
 
+@app.get("/api")
+async def root():
+    return {"value": "Hello, 42!"}
 
 @app.get("/path")
 async def demo_get():
