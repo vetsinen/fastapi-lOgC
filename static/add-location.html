@@ -14,17 +14,17 @@
         <div id="app">
             <div>
                 <label>
-                    name for location: <br><input type="text" v-model="title" placeholder="some good cafe">
+                    name for location: <br><input class="input is-large" type="text" v-model="title" placeholder="some good cafe">
                 </label>
             </div>
             <div>
                 <label>
-                    <textarea id="w3review" v-model="review" placeholder="is there wifi, electricity"
+                    <textarea class="textarea is-large" id="w3review" v-model="review" placeholder="is there wifi, electricity"
                               rows="4"></textarea>
                 </label>
             </div>
             <div>
-                <button v-on:click="getLocation">save location</button>
+                <button v-on:click="getLocation" class="button is-primary is-large">save location</button>
             </div>
 
             <div>log: {{ message }}</div>
