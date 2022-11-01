@@ -2,9 +2,17 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse
+from pydantic import BaseModel
+from repository import save_location
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+class Location(BaseModel):
+    title: str
+    review: str
+    long: float
+    lat: float
 
 class Msg(BaseModel):
     msg: str
@@ -14,9 +22,11 @@ class Msg(BaseModel):
 async def root():
     return FileResponse('static/add-location.html')
 
-@app.get("/api")
-async def root():
-    return {"value": "Hello, 42!"}
+@app.post("/api")
+async def root(location: Location):
+    print(location)
+    id = save_location(location)
+    return {"id": 42}
 
 @app.get("/path")
 async def demo_get():

@@ -16,3 +16,4 @@ watchfiles==0.16.1
 websockets==10.3
 pyMongo
 aiofiles
+dotenv

@@ -7,17 +7,35 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
 <section class="section">
     <div class="container">
-        <button onclick="getLocation()">detect coordinates</button>
-        <p id="demo"></p>
+        <div id="app">
+            <form action="">
+                <label>
+                    name for location: <input type="text" v-model="title" placeholder="some good cafe">
+                </label>
+                <label>
+                    <textarea id="w3review" v-model="review" placeholder="is there wifi, electricity" rows="4" cols="50"></textarea>
+                </label>
+
+
+
+            <button v-on:click="getLocation">detect</button>
+            </form>
+
+            <span>log: {{ message }}</span>
+        </div>
+<!--        <button onclick="getLocation()">detect coordinates</button>-->
+<!--        <p id="demo"></p>-->
     </div>
 </section>
 
 <script>
     const x = document.getElementById("demo");
 
-    function getLocation() {
+    function AgetLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
@@ -29,6 +47,46 @@
         x.innerHTML = "Latitude: " + position.coords.latitude +
             "<br>Longitude: " + position.coords.longitude;
     }
+</script>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!',
+            title:'',
+            review:'',
+        },
+        methods: {
+            greet: function (event){
+                alert('hey')
+            },
+            getLocation(){
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(this.showCoordinates);
+                } else {
+                    x.innerHTML = "Geolocation is not supported by this browser.";
+                }
+            },
+            showCoordinates(position){
+                this.message = "Latitude: " + position.coords.latitude +
+                    "<br>Longitude: " + position.coords.longitude
+
+                const requestOptions = {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        long: position.coords.latitude,
+                        lat: position.coords.longitude,
+                        title: this.title,
+                        review: this.review,
+                    })
+                };
+                fetch("/api", requestOptions)
+                    .then(response => response.json())
+                    .then(data => (this.postId = data.id));
+            }
+        }
+    })
 </script>
 </body>
 </html>
