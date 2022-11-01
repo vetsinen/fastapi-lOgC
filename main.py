@@ -12,7 +12,7 @@ class Msg(BaseModel):
 
 @app.get("/")
 async def root():
-    return FileResponse('static/index.html')
+    return FileResponse('static/add-location.html')
 
 @app.get("/api")
 async def root():
