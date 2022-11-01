@@ -17,18 +17,18 @@
                     name for location: <input type="text" v-model="title" placeholder="some good cafe">
                 </label>
                 <label>
-                    <textarea id="w3review" v-model="review" placeholder="is there wifi, electricity" rows="4" cols="50"></textarea>
+                    <textarea id="w3review" v-model="review" placeholder="is there wifi, electricity"
+                              rows="4"></textarea>
                 </label>
 
 
-
-            <button v-on:click="getLocation">detect</button>
+                <button v-on:click="getLocation">detect</button>
             </form>
 
             <span>log: {{ message }}</span>
         </div>
-<!--        <button onclick="getLocation()">detect coordinates</button>-->
-<!--        <p id="demo"></p>-->
+        <!--        <button onclick="getLocation()">detect coordinates</button>-->
+        <!--        <p id="demo"></p>-->
     </div>
 </section>
 
@@ -53,38 +53,34 @@
         el: '#app',
         data: {
             message: 'Hello Vue!',
-            title:'',
-            review:'',
+            title: '',
+            review: '',
         },
         methods: {
-            greet: function (event){
+            greet: function (event) {
                 alert('hey')
             },
-            getLocation(){
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(this.showCoordinates);
-                } else {
-                    x.innerHTML = "Geolocation is not supported by this browser.";
-                }
-            },
-            showCoordinates(position){
-                this.message = "Latitude: " + position.coords.latitude +
-                    "<br>Longitude: " + position.coords.longitude
+            getLocation() {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const {latitude, longitude} = position.coords;
+                    this.message = "Latitude: " + latitude +
+                        "<br>Longitude: " + longitude
 
-                const requestOptions = {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        long: position.coords.latitude,
-                        lat: position.coords.longitude,
-                        title: this.title,
-                        review: this.review,
-                    })
-                };
-                fetch("/api", requestOptions)
-                    .then(response => response.json())
-                    .then(data => (this.postId = data.id));
-            }
+                    const requestOptions = {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            long: position.coords.latitude,
+                            lat: position.coords.longitude,
+                            title: this.title,
+                            review: this.review,
+                        })
+                    };
+                    fetch("/api", requestOptions)
+                        .then(response => response.json())
+                        .then(data => (this.message = data.id));
+                })
+            },
         }
     })
 </script>
