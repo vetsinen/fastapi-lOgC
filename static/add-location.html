@@ -11,9 +11,10 @@
 
 <section class="section">
     <div class="container">
+        <p>this app is an open source alternative to Swarm mobile app and let you fully control loctions, where you checkin</p>
         <div id="app">
             <div v-if="geoapi">🌎 is on</div>
-            <div v-else>try to allow geolocation</div>
+            <div v-else class="has-background-danger-dark">try to allow geolocation</div>
             <div>
                 <label>
                     <br><input class="input is-large" type="text" v-model="title" placeholder="some good cafe">
@@ -29,7 +30,7 @@
             <div>
                 <button v-on:click="getLocation" class="button is-primary is-large">save location</button>
             </div>
-
+            <br>
             <div>last locations:</div>
             <ul v-for="loc in lastLocations">
             <button class="buttin is-danger">delete</button> {{loc.title}}-{{loc.review}}
