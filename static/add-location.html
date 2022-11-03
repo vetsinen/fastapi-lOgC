@@ -11,10 +11,11 @@
 
 <section class="section">
     <div class="container">
-        <p>this app is an open source alternative to Swarm mobile app and let you fully control locations, where you checkin <button v-on:click="reset" class="button is-small">reset fields</button></p>
+
         <div id="app">
+            <p>this app is an open source alternative to Swarm mobile app and let you fully control locations, where you checkin <button v-on:click="reset" class="button is-small">reset fields</button></p>
             <div v-if="geoapi">geolocation 🌎 is on </div>
-            <div v-else class="has-background-danger-dark">try to allow geolocation</div>
+            <div v-else class="has-background-danger-dark">geolocation is off, try to allow it</div>
             <div>
                 <br><input class="input is-large" type="text" v-model="title" placeholder="title of good cafe">
             </div>
