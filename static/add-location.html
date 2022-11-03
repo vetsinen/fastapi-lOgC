@@ -12,14 +12,17 @@
 <section class="section">
     <div class="container">
         <div id="app">
+            <div v-if="geoapi">🌎 is on</div>
+            <div v-else>try to allow geolocation</div>
             <div>
                 <label>
-                    name for location: <br><input class="input is-large" type="text" v-model="title" placeholder="some good cafe">
+                    <br><input class="input is-large" type="text" v-model="title" placeholder="some good cafe">
                 </label>
             </div>
             <div>
                 <label>
-                    <textarea class="textarea is-large" id="w3review" v-model="review" placeholder="is there wifi, electricity"
+                    <textarea class="textarea is-large" id="w3review" v-model="review"
+                              placeholder="is there wifi, electricity"
                               rows="4"></textarea>
                 </label>
             </div>
@@ -27,36 +30,29 @@
                 <button v-on:click="getLocation" class="button is-primary is-large">save location</button>
             </div>
 
-            <div>log: {{ message }}</div>
+            <div>last locations:</div>
+            <ul v-for="loc in lastLocations">
+            <button class="buttin is-danger">delete</button> {{loc.title}}-{{loc.review}}
+            </ul>
         </div>
-        <!--        <button onclick="getLocation()">detect coordinates</button>-->
-        <!--        <p id="demo"></p>-->
     </div>
 </section>
 
 <script>
-    const x = document.getElementById("demo");
-
-    function AgetLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            x.innerHTML = "Geolocation is not supported by this browser.";
-        }
-    }
-
-    function showPosition(position) {
-        x.innerHTML = "Latitude: " + position.coords.latitude +
-            "<br>Longitude: " + position.coords.longitude;
-    }
-</script>
-<script>
     const app = new Vue({
         el: '#app',
+        created: function () {
+            navigator.geolocation.getCurrentPosition(() => {
+                this.geoapi = true
+            }, () => this.geoapi = false)
+            this.getLastLocations()
+        },
         data: {
             message: 'Hello Vue!',
+            geoapi: false,
             title: '',
             review: '',
+            lastLocations: []
         },
         methods: {
             greet: function (event) {
@@ -64,25 +60,36 @@
             },
             getLocation() {
                 navigator.geolocation.getCurrentPosition(position => {
-                    const {latitude, longitude} = position.coords;
-                    this.message = "Latitude: " + latitude +
-                        "<br>Longitude: " + longitude
+                        const {latitude, longitude} = position.coords;
+                        this.message = "Latitude: " + latitude +
+                            "<br>Longitude: " + longitude
 
-                    const requestOptions = {
-                        method: "POST",
-                        headers: {"Content-Type": "application/json"},
-                        body: JSON.stringify({
-                            long: position.coords.latitude,
-                            lat: position.coords.longitude,
-                            title: this.title,
-                            review: this.review,
-                        })
-                    };
-                    fetch("/api", requestOptions)
-                        .then(response => response.json())
-                        .then(data => (this.message = data.id));
-                })
+                        const requestOptions = {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({
+                                long: position.coords.latitude,
+                                lat: position.coords.longitude,
+                                title: this.title,
+                                review: this.review,
+                            })
+                        };
+                        fetch("/api", requestOptions)
+                            .then(response => { return response.json()})
+                            .then(data => {
+                                this.message = data.id
+                                this.getLastLocations()
+                            });
+                    },
+                    () => {
+                        this.geoapi = false
+                    })
             },
+            getLastLocations: function () {
+                fetch("/api").then((response) => {
+                    return response.json();
+                }).then((data)=>{this.lastLocations = data})
+            }
         }
     })
 </script>
