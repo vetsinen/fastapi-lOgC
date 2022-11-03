@@ -10,11 +10,21 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
 <section class="section">
+    <div class="tabs">
+        <ul>
+            <li class="is-active"><a>add location</a></li>
+            <li><a href="/map">map, under construction</a></li>
+            <!--    <li><a>Videos</a></li>-->
+        </ul>
+    </div>
     <div class="container">
 
         <div id="app">
-            <p>this app is an open source alternative to Swarm mobile app and let you fully control locations, where you checkin <button v-on:click="reset" class="button is-small">reset fields</button></p>
-            <div v-if="geoapi">geolocation 🌎 is on </div>
+            <p>this app is an open source alternative to Swarm mobile app and let you fully control locations, where you
+                checkin
+                <button v-on:click="reset" class="button is-small">reset fields</button>
+            </p>
+            <div v-if="geoapi">geolocation 🌎 is on</div>
             <div v-else class="has-background-danger-dark">geolocation is off, try to allow it</div>
             <div>
                 <br><input class="input is-large" type="text" v-model="title" placeholder="title of good cafe">
@@ -30,7 +40,7 @@
             <br>
             <div>last locations:</div>
             <ul v-for="loc in lastLocations">
-                <button class="buttin is-danger">delete</button>
+                <button disabled class="buttin is-danger">delete</button>
                 {{loc.title}}-{{loc.review}}
             </ul>
         </div>
@@ -57,7 +67,10 @@
             greet: function (event) {
                 alert('hey')
             },
-            reset: function (){this.title=''; this.review=''},
+            reset: function () {
+                this.title = '';
+                this.review = ''
+            },
             getLocation() {
                 navigator.geolocation.getCurrentPosition(position => {
                         const {latitude, longitude} = position.coords;

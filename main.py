@@ -44,8 +44,12 @@ class Msg(BaseModel):
         }
 
 @app.get("/")
-async def root():
+async def index():
     return FileResponse('static/add-location.html')
+
+@app.get("/map")
+async def map():
+    return FileResponse('static/map.html')
 
 @app.post("/api")
 async def location(location: Location):

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello map</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+          integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+            integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+            crossorigin=""></script>
+</head>
+<body>
+<section class="section">
+        <div class="tabs">
+        <ul>
+            <li ><a href="/">add location</a></li>
+            <li class="is-active"><a href="/map">map, under construction</a></li>
+            <!--    <li><a>Videos</a></li>-->
+        </ul>
+    </div>
+    <div class="container">
+        <div id="map" style="min-height: 350px; border-color: red; border-style: solid;">
+
+        </div>
+    </div>
+</section>
+<script>
+    const map = L.map('map').setView([50.44182, 30.4341219], 13)
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map)
+
+    const marker1 = L.marker([50.441776, 30.4322778]).addTo(map)
+    marker1.bindPopup("<b>Сімейна пекарня</b><br>a popup.").openPopup();
+
+</script>
+</body>
+</html>
