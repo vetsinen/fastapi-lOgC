@@ -11,21 +11,17 @@
 
 <section class="section">
     <div class="container">
-        <p>this app is an open source alternative to Swarm mobile app and let you fully control loctions, where you checkin</p>
+        <p>this app is an open source alternative to Swarm mobile app and let you fully control locations, where you checkin <button v-on:click="reset" class="button is-small">reset fields</button></p>
         <div id="app">
-            <div v-if="geoapi">🌎 is on</div>
+            <div v-if="geoapi">geolocation 🌎 is on </div>
             <div v-else class="has-background-danger-dark">try to allow geolocation</div>
             <div>
-                <label>
-                    <br><input class="input is-large" type="text" v-model="title" placeholder="some good cafe">
-                </label>
+                <br><input class="input is-large" type="text" v-model="title" placeholder="title of good cafe">
             </div>
             <div>
-                <label>
                     <textarea class="textarea is-large" id="w3review" v-model="review"
-                              placeholder="is there wifi, electricity"
+                              placeholder="description, is there wifi, electricity etc."
                               rows="4"></textarea>
-                </label>
             </div>
             <div>
                 <button v-on:click="getLocation" class="button is-primary is-large">save location</button>
@@ -33,7 +29,8 @@
             <br>
             <div>last locations:</div>
             <ul v-for="loc in lastLocations">
-            <button class="buttin is-danger">delete</button> {{loc.title}}-{{loc.review}}
+                <button class="buttin is-danger">delete</button>
+                {{loc.title}}-{{loc.review}}
             </ul>
         </div>
     </div>
@@ -59,6 +56,7 @@
             greet: function (event) {
                 alert('hey')
             },
+            reset: function (){this.title=''; this.review=''},
             getLocation() {
                 navigator.geolocation.getCurrentPosition(position => {
                         const {latitude, longitude} = position.coords;
@@ -76,7 +74,9 @@
                             })
                         };
                         fetch("/api", requestOptions)
-                            .then(response => { return response.json()})
+                            .then(response => {
+                                return response.json()
+                            })
                             .then(data => {
                                 this.message = data.id
                                 this.getLastLocations()
@@ -89,7 +89,9 @@
             getLastLocations: function () {
                 fetch("/api").then((response) => {
                     return response.json();
-                }).then((data)=>{this.lastLocations = data})
+                }).then((data) => {
+                    this.lastLocations = data
+                })
             }
         }
     })

@@ -30,7 +30,8 @@ def save_location(location):
 
 def get_last_locations():
     #TODO: use pydantic serializer
-    cursor = collection.find().sort([("creation", pymongo.DESCENDING)]).limit(3)
+    cursor = collection.find({}, {'_id': 1, 'title':1, 'review':1})\
+        .sort([("creation", pymongo.DESCENDING)]).limit(3)
     docs =  loads(dumps(cursor))
 
     rez = []
