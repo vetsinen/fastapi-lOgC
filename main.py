@@ -5,7 +5,7 @@ from starlette.responses import FileResponse
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-from repository import save_location, get_last_locations
+import repository #import save_location,get_all_locations, get_last_locations
 
 from pydantic import BaseModel, Field
 from bson import ObjectId
@@ -47,6 +47,10 @@ class Msg(BaseModel):
 async def index():
     return FileResponse('static/add-location.html')
 
+@app.get("/locations")
+async def map():
+    return FileResponse('static/locations.html')
+
 @app.get("/map")
 async def map():
     return FileResponse('static/map.html')
@@ -54,13 +58,21 @@ async def map():
 @app.post("/api")
 async def location(location: Location):
     print(location)
-    id = save_location(location)
+    id = repository.save_location(location)
     return {"status": 200}
 
-@app.get("/api")
-async def last_location():
-    return get_last_locations()
+@app.get("/api/all")
+async def location():
+    return repository.get_all_locations()
 
+@app.get("/api/last")
+async def last_location():
+    return repository.get_last_locations()
+
+@app.delete("/api/{id}")
+async def delete(id:str):
+    repository.remove(id)
+    return {"v":id}
 
 @app.get("/path")
 async def demo_get():

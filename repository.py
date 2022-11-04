@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from bson.json_util import dumps
 from bson.json_util import loads
+from bson.objectid import ObjectId
 
 load_dotenv()
 client = MongoClient(os.environ['MONGOURL'])
@@ -43,6 +44,24 @@ def get_last_locations():
             "review": loc['review'][0:15]
         })
     return rez
+
+def get_all_locations():
+    # TODO: use pydantic serializer
+    cursor = collection.find({}, {'_id': 1, 'title': 1, 'review': 1})
+    docs = loads(dumps(cursor))
+
+    rez = []
+    for loc in docs:
+        rez.append({
+            "id": str(loc['_id']),
+            "title": loc['title'],
+            "review": loc['review']
+        })
+    return rez
+
+def remove(id:str):
+    print(type(id), id)
+    collection.delete_one({'_id': ObjectId(id)})
 
 if __name__ == '__main__':
     db = client.test

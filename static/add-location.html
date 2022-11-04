@@ -9,22 +9,19 @@
 <body>
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
-<section class="section">
+<section class="section" style="padding: 1rem 1rem">
     <div class="tabs">
         <ul>
             <li class="is-active"><a>add location</a></li>
-            <li><a href="/map">map, under construction</a></li>
+            <li><a href="/locations">locations</a></li>
             <!--    <li><a>Videos</a></li>-->
         </ul>
     </div>
     <div class="container">
 
         <div id="app">
-            <p>this app is an open source alternative to Swarm mobile app and let you fully control locations, where you
-                checkin
-                <button v-on:click="reset" class="button is-small">reset fields</button>
-            </p>
-            <div v-if="geoapi">geolocation 🌎 is on</div>
+            <div v-if="geoapi">geolocation 🌎 is on <button v-on:click="reset" class="button is-small">reset fields</button></div>
+
             <div v-else class="has-background-danger-dark">geolocation is off, try to allow it</div>
             <div>
                 <br><input class="input is-large" type="text" v-model="title" placeholder="title of good cafe">
@@ -45,6 +42,10 @@
             </ul>
         </div>
     </div>
+    <br>
+    <p>this app is an open source alternative to Swarm mobile app and let you fully control locations, where you
+        checkin
+    </p>
 </section>
 
 <script>
@@ -101,7 +102,7 @@
                     })
             },
             getLastLocations: function () {
-                fetch("/api").then((response) => {
+                fetch("/api/last").then((response) => {
                     return response.json();
                 }).then((data) => {
                     this.lastLocations = data
