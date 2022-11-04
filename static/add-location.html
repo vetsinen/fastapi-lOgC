@@ -20,7 +20,9 @@
     <div class="container">
 
         <div id="app">
-            <div v-if="geoapi">geolocation 🌎 is on <button v-on:click="reset" class="button is-small">reset fields</button></div>
+            <div v-if="geoapi">geolocation 🌎 is on
+                <button v-on:click="reset" class="button is-small">reset fields</button>
+            </div>
 
             <div v-else class="has-background-danger-dark">geolocation is off, try to allow it</div>
             <div>
@@ -37,7 +39,7 @@
             <br>
             <div>last locations:</div>
             <ul v-for="loc in lastLocations">
-                <button disabled class="buttin is-danger">delete</button>
+                <button v-on:click="remove(loc.id)" class="button is-small">delete</button>
                 {{loc.title}}-{{loc.review}}
             </ul>
         </div>
@@ -107,7 +109,18 @@
                 }).then((data) => {
                     this.lastLocations = data
                 })
-            }
+            },
+            remove: function (id) {
+                console.log('deleting ' + id)
+
+                const requestOptions = {
+                    method: "DELETE",
+                    headers: {"Content-Type": "application/json"},
+                };
+                fetch("/api/" + id, requestOptions).then(() => {
+                    this.getLastLocations()
+                })
+            },
         }
     })
 </script>
