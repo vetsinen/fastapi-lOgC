@@ -1,5 +1,5 @@
 ---
-title: FastAPI
+title: FastAPI open swarm
 description: A FastAPI server
 tags:
   - fastapi
